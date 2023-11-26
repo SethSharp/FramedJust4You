@@ -20,7 +20,7 @@ Route::get('/art-studio', function () { return Inertia::render('Studio'); })->na
 Route::get('/faq', function () { return Inertia::render('FAQ'); })->name('faq');
 Route::get('/contact', function () { return Inertia::render('Find'); })->name('contact');
 Route::get('/locator', function () { return Inertia::render('Locator'); })->name('locator');
-Route::get('/store', function () { return Inertia::render('Store'); })->name('store');
+Route::get('/store', \App\Http\Controllers\ShowStoreController::class)->name('store');
 
 Route::prefix('services')->name('services.')->group(function () {
     Route::prefix('framing')->name('framing.')->group(function () {
