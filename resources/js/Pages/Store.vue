@@ -23,17 +23,24 @@ defineProps({
 
                                 <!-- Product info -->
                                 <div class="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-                                    <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ item.name }}</h1>
+                                    <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+                                        {{ item.name }}
+                                    </h1>
 
                                     <div class="mt-3">
                                         <h2 class="sr-only">Product information</h2>
-                                        <p class="text-3xl tracking-tight text-gray-900">${{ item.price }}</p>
+                                        <p class="text-3xl tracking-tight text-gray-900">
+                                            ${{ item.price }}
+                                        </p>
                                     </div>
 
                                     <div class="mt-6">
                                         <h3 class="sr-only">Description</h3>
 
-                                        <div class="space-y-6 text-base text-gray-700" v-html="item.description" />
+                                        <div
+                                            class="space-y-6 text-base text-gray-700"
+                                            v-html="item.description"
+                                        />
                                     </div>
                                 </div>
                             </div>
