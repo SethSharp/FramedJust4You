@@ -1,12 +1,12 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import Section from '@/Layouts/Section.vue'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Image from '@/Components/Image.vue'
 </script>
 
 <template>
-    <Head title="Prints, Posters and Photos"/>
+    <Head title="Prints, Posters and Photos" />
 
     <PrimaryLayout>
         <Section>
@@ -27,9 +27,9 @@ import Image from '@/Components/Image.vue'
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 w-3/4 mx-auto gap-x-6 gap-y-6 my-8">
-                    <Image src="prints-photos/picture-2.webp"/>
-                    <Image src="prints-photos/picture-1.webp" class="my-auto"/>
-                    <Image src="prints-photos/poster-1.webp"/>
+                    <Image src="prints-photos/picture-2.webp" />
+                    <Image src="prints-photos/picture-1.webp" class="my-auto" />
+                    <Image src="prints-photos/poster-1.webp" />
                 </div>
             </template>
         </Section>
