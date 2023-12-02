@@ -1,12 +1,12 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import Section from '@/Layouts/Section.vue'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Image from '@/Components/Image.vue'
 </script>
 
 <template>
-    <Head title="Acrylic"/>
+    <Head title="Acrylic" />
 
     <PrimaryLayout>
         <Section>
@@ -34,9 +34,9 @@ import Image from '@/Components/Image.vue'
                 </div>
 
                 <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-x-2 gap-y-2 mx-8 my-8">
-                    <Image src="acrylic/football.webp" alt="Football in case" class="my-auto"/>
-                    <Image src="acrylic/boot.webp" alt="Boot in case" class="my-auto"/>
-                    <Image src="acrylic/shovel.webp" alt="Golden Shovel in case" class="my-auto"/>
+                    <Image src="acrylic/football.webp" alt="Football in case" class="my-auto" />
+                    <Image src="acrylic/boot.webp" alt="Boot in case" class="my-auto" />
+                    <Image src="acrylic/shovel.webp" alt="Golden Shovel in case" class="my-auto" />
                 </div>
             </template>
         </Section>

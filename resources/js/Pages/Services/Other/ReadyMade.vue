@@ -1,12 +1,12 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import Section from '@/Layouts/Section.vue'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Image from '@/Components/Image.vue'
 </script>
 
 <template>
-    <Head title="Ready Made"/>
+    <Head title="Ready Made" />
 
     <PrimaryLayout>
         <Section>

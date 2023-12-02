@@ -1,12 +1,12 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import Image from '@/Components/Image.vue'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Section from '@/Layouts/Section.vue'
 </script>
 
 <template>
-    <Head title="Matboard Cutting"/>
+    <Head title="Matboard Cutting" />
 
     <PrimaryLayout>
         <Section>
@@ -56,7 +56,7 @@ import Section from '@/Layouts/Section.vue'
                 colours.
 
                 <div class="grid grid-cols-3 gap-x-4 my-12">
-                    <Image src="matboards/record.webp" alt="Metallica Record" class="my-auto"/>
+                    <Image src="matboards/record.webp" alt="Metallica Record" class="my-auto" />
                     <Image
                         src="matboards/gymnastics.webp"
                         alt="Gymnastics frame with multiple cutouts for medals"

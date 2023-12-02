@@ -1,18 +1,18 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Section from '@/Layouts/Section.vue'
 import PricingTable from '@/Components/Card/PricingTable.vue'
 import Image from '@/Components/Image.vue'
 
 const squareCanvas = [
-    {inches: '12"x12"', cm: '30cm x 30cm', pricing: '$70.00'},
-    {inches: '16"x16"', cm: '40cm x 40cm', pricing: '$90.00'},
-    {inches: '20"x20"', cm: '51cm x 51cm', pricing: '$140.00'},
-    {inches: '24"x24"', cm: '61cm x 61cm', pricing: '$150.00'},
-    {inches: '30"x30"', cm: '76cm x 76cm', pricing: '$260.00'},
-    {inches: '36"x36"', cm: '91cm x 91cm', pricing: '$300.00'},
-    {inches: '40"x40"', cm: '102cm x 102cm', pricing: '$330.00'},
+    { inches: '12"x12"', cm: '30cm x 30cm', pricing: '$70.00' },
+    { inches: '16"x16"', cm: '40cm x 40cm', pricing: '$90.00' },
+    { inches: '20"x20"', cm: '51cm x 51cm', pricing: '$140.00' },
+    { inches: '24"x24"', cm: '61cm x 61cm', pricing: '$150.00' },
+    { inches: '30"x30"', cm: '76cm x 76cm', pricing: '$260.00' },
+    { inches: '36"x36"', cm: '91cm x 91cm', pricing: '$300.00' },
+    { inches: '40"x40"', cm: '102cm x 102cm', pricing: '$330.00' },
 ]
 
 const canvasSquares = {
@@ -109,7 +109,7 @@ const config = [
 </script>
 
 <template>
-    <Head title="Printing"/>
+    <Head title="Printing" />
 
     <PrimaryLayout>
         <Section>
@@ -147,7 +147,7 @@ const config = [
             <template #content>
                 {{ item.description }}
                 <div class="mt-8 flow-root" v-if="item.data">
-                    <PricingTable v-for="data in item.data" :data="data"/>
+                    <PricingTable v-for="data in item.data" :data="data" />
                 </div>
             </template>
         </Section>

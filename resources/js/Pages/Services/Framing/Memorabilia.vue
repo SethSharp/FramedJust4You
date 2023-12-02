@@ -1,12 +1,12 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Section from '@/Layouts/Section.vue'
 import Image from '@/Components/Image.vue'
 </script>
 
 <template>
-    <Head title="Memorabilia"/>
+    <Head title="Memorabilia" />
 
     <PrimaryLayout>
         <Section>
@@ -38,7 +38,7 @@ import Image from '@/Components/Image.vue'
                     autographed garments, costumes, and rare signed correspondence.
                 </p>
                 <div class="sm:w-3/4 mx-auto my-2">
-                    <Image src="memorabilia/memorabilia-3.webp" alt="Collectables"/>
+                    <Image src="memorabilia/memorabilia-3.webp" alt="Collectables" />
                 </div>
             </template>
         </Section>
@@ -87,7 +87,7 @@ import Image from '@/Components/Image.vue'
                     within just one week.
                 </p>
                 <div class="sm:w-3/4 mx-auto my-2">
-                    <Image src="memorabilia/jerseys.webp" alt="Framed Sport Jerseys"/>
+                    <Image src="memorabilia/jerseys.webp" alt="Framed Sport Jerseys" />
                 </div>
             </template>
         </Section>

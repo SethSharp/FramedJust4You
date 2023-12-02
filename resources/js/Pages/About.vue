@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import * as TeamMemberCards from '@/Components/Card/Team'
 import Section from '@/Layouts/Section.vue'
@@ -59,7 +59,7 @@ const teamMembers = [
 </script>
 
 <template>
-    <Head title="About"/>
+    <Head title="About" />
 
     <PrimaryLayout>
         <div id="intro">

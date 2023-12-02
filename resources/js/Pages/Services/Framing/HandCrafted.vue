@@ -1,12 +1,12 @@
 <script setup>
-import {Head} from '@inertiajs/vue3'
+import { Head } from '@inertiajs/vue3'
 import Section from '@/Layouts/Section.vue'
 import PrimaryLayout from '@/Layouts/PrimaryLayout.vue'
 import Image from '@/Components/Image.vue'
 </script>
 
 <template>
-    <Head title="Tapestries and Needlework"/>
+    <Head title="Tapestries and Needlework" />
 
     <PrimaryLayout>
         <Section>
@@ -26,7 +26,7 @@ import Image from '@/Components/Image.vue'
                             traditional craftsmanship.
                         </div>
                         <div class="sm:w-1/2 sm:w-full mt-4 sm:mt-0">
-                            <Image src="handcrafted/pressed.webp" class="w-3/4 mx-auto"/>
+                            <Image src="handcrafted/pressed.webp" class="w-3/4 mx-auto" />
                         </div>
                     </div>
                 </div>
