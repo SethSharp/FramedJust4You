@@ -77,7 +77,7 @@ jobs:
       #          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
 
       - name: Build ZIP Deployment Package
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/develop'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
       - name: Deploy to Staging Environment
