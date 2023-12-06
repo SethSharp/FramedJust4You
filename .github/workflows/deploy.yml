@@ -47,8 +47,12 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
+      - name: Copy staging example .env
+        if: github.ref != 'refs/heads/develop'
+        run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
+
       - name: Copy example .env
-        if: github.ref != 'refs/heads/main'
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Generate key
@@ -75,7 +79,20 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
-      - name: Deploy to Elastic Beanstalk
+      - name: Deploy to Staging Environment
+        if: github.ref == 'refs/heads/develop'
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
+          application_name: "FramedJustForYou"
+          environment_name: FramedJustForYou-env
+          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
+          region: ap-southeast-2
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
+
+      - name: Deploy to Production Environment
         if: github.ref == 'refs/heads/main'
         uses: einaregilsson/beanstalk-deploy@v18
         with:
