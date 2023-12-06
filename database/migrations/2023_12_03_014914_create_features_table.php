@@ -10,13 +10,9 @@ return new class() extends Migration {
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('file_id');
-            $table->foreignId('category_id');
-            $table->string('title');
-            $table->text('description');
-            $table->integer('price');
+            $table->string('description');
             $table->timestamps();
         });
     }

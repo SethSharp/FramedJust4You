@@ -21,7 +21,7 @@ const toggleShow = () => {
 </script>
 
 <template>
-    <div class="relative overflow-hidden rounded-xl shadow-sm">
+    <div class="relative overflow-hidden rounded-xl shadow-sm h-52">
         <div>
             <div class="self-stretch flex-grow overflow-hidden">
                 <div class="aspect-1">

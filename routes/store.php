@@ -20,5 +20,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/delete/{category}', \App\Http\Controllers\Categories\DeleteCategoryController::class)->name('delete');
     });
 
+    Route::middleware('role:admin,manager')->prefix('products')->name('products.')->group(function () {
+        Route::get('/', \App\Http\Controllers\Products\IndexProductsController::class)->name('index');
+    });
+
     Route::post('/store/file', \App\Http\Controllers\Files\StoreFileController::class)->name('file.store');
 });
