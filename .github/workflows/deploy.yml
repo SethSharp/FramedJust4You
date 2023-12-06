@@ -48,7 +48,7 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
       - name: Copy staging example .env
-        if: github.ref != 'refs/heads/develop'
+        if: github.ref != 'refs/develop'
         run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
 
       - name: Copy example .env
@@ -74,6 +74,14 @@ jobs:
           php artisan route:clear
           php artisan view:clear
           php artisan config:clear
+
+      - name: Echo DB infor to env
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE}}" >> .env
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
 
       - name: Build ZIP Deployment Package
         if: github.ref == 'refs/heads/main'
