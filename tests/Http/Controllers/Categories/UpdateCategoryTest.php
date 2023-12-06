@@ -2,6 +2,7 @@
 
 namespace Tests\Http\Controllers\Categories;
 
+use App\Domain\Workspace\Models\Workspace;
 use Tests\TestCase;
 use App\Domain\Iam\Models\User;
 use App\Domain\Files\Models\File;
@@ -77,12 +78,6 @@ class UpdateCategoryTest extends TestCase
             ->assertRedirect()
             ->assertSessionHas('success', 'Successfully updated category!');
 
-        $file = File::first();
-
-        $this->assertDatabaseHas('categories', [
-            'name' => 'Some category',
-            'description' => 'Some description',
-            'file_id' => $file->id
-        ]);
+        Storage::assertExists($file->hashName('categories'));
     }
 }
