@@ -12,7 +12,10 @@ class ProductTableSeeder extends Seeder
     {
         $productCount = 4;
         // loop this over how many files there are and adjust the factory to pass to file factory
-        $products = Product::factory()->count($productCount)->create();
+        $products = Product::factory()->count($productCount)->create([
+            'file_id' => null,
+            'category_id' => null,
+        ]);
 
         foreach ($products as $index => $product) {
             $product->update([
