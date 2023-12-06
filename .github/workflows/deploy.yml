@@ -71,7 +71,7 @@ jobs:
       - name: Echo DB information to env
         if: github.ref == 'refs/heads/develop'
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
+          echo "DB_HOST=${{ secrets.STAGING_DB_HOST}}" >> .env
           echo "DB_DATABASE=${{ secrets.STAGING_DB_DATABASE}}" >> .env
           echo "DB_USERNAME=${{ secrets.STAGING_DB_USERNAME}}" >> .env
           echo "DB_PASSWORD=${{ secrets.STAGING_DB_PASSWORD}}" >> .env
