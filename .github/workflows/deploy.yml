@@ -76,7 +76,7 @@ jobs:
           php artisan config:clear
 
       - name: Echo DB infor to env
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/develop'
         run: |
           echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
           echo "DB_DATABASE=${{ secrets.DB_DATABASE}}" >> .env
@@ -84,11 +84,11 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
 
       - name: Build ZIP Deployment Package
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/develop'
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
       - name: Deploy to Staging Environment
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/develop'
         uses: einaregilsson/beanstalk-deploy@v18
         with:
           aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
