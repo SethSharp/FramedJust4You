@@ -48,11 +48,11 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
       - name: Copy staging example .env
-        if: github.ref != 'refs/develop'
+        if: github.ref == 'refs/develop'
         run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
 
       - name: Copy example .env
-        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/develop'
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Generate key
