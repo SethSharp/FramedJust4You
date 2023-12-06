@@ -48,11 +48,11 @@ jobs:
         run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
       - name: Copy staging example .env
-        if: github.ref == 'refs/develop'
+        if: github.ref == 'refs/heads/develop'
         run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
 
       - name: Copy example .env
-        if: github.ref != 'refs/heads/main' && github.ref != 'refs/develop'
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
       - name: Generate key
@@ -68,37 +68,30 @@ jobs:
           DB_PASSWORD: root
         run: php artisan test
 
-      - name: Clear Cache
-        run: |
-          php artisan cache:clear
-          php artisan route:clear
-          php artisan view:clear
-          php artisan config:clear
-
-      - name: Echo DB infor to env
-        if: github.ref == 'refs/develop'
-        run: |
-          echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE}}" >> .env
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
+      #      - name: Echo DB information to env
+      #        if: github.ref == 'refs/develop'
+      #        run: |
+      #          echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
+      #          echo "DB_DATABASE=${{ secrets.DB_DATABASE}}" >> .env
+      #          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
+      #          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
 
       - name: Build ZIP Deployment Package
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/develop'
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
-      - name: Deploy to Staging Environment
-        if: github.ref == 'refs/develop'
-        uses: einaregilsson/beanstalk-deploy@v18
-        with:
-          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
-          application_name: "FramedJustForYou"
-          environment_name: FramedJustForYou-env
-          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
-          region: ap-southeast-2
-          version_label: ${{ github.sha }}
-          deployment_package: deploy.zip
+      #      - name: Deploy to Staging Environment
+      #        if: github.ref == 'refs/develop'
+      #        uses: einaregilsson/beanstalk-deploy@v18
+      #        with:
+      #          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
+      #          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
+      #          application_name: "FramedJustForYou"
+      #          environment_name: FramedJustForYou-env
+      #          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
+      #          region: ap-southeast-2
+      #          version_label: ${{ github.sha }}
+      #          deployment_package: deploy.zip
 
       - name: Deploy to Production Environment
         if: github.ref == 'refs/heads/main'
