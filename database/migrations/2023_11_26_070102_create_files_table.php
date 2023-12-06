@@ -12,7 +12,6 @@ return new class() extends Migration {
     {
         Schema::create('files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            //            $table->foreignId('product_id');
             $table->string('path');
             $table->timestamps();
         });
