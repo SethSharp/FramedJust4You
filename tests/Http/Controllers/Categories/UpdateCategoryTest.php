@@ -2,10 +2,8 @@
 
 namespace Tests\Http\Controllers\Categories;
 
-use App\Domain\Workspace\Models\Workspace;
 use Tests\TestCase;
 use App\Domain\Iam\Models\User;
-use App\Domain\Files\Models\File;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Domain\Categories\Models\Category;
