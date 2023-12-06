@@ -68,13 +68,13 @@ jobs:
           DB_PASSWORD: root
         run: php artisan test
 
-      #      - name: Echo DB information to env
-      #        if: github.ref == 'refs/develop'
-      #        run: |
-      #          echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
-      #          echo "DB_DATABASE=${{ secrets.DB_DATABASE}}" >> .env
-      #          echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
-      #          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
+      - name: Echo DB information to env
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST}}" >> .env
+          echo "DB_DATABASE=${{ secrets.STAGING_DB_DATABASE}}" >> .env
+          echo "DB_USERNAME=${{ secrets.STAGING_DB_USERNAME}}" >> .env
+          echo "DB_PASSWORD=${{ secrets.STAGING_DB_PASSWORD}}" >> .env
 
       - name: Build ZIP Deployment Package
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
