@@ -85,7 +85,7 @@ jobs:
 
       - name: Notify Slack
         run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text:"Deployed to staging!"}' https://hooks.slack.com/services/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
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Staging updated!"}' https://hooks.slack.com/services/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
 
   production:
 
