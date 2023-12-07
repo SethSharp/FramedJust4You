@@ -15,7 +15,8 @@ jobs:
       DB_PASSWORD: root
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up MySQL
         run: |
@@ -158,7 +159,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        
+
       - name: Copy production .env
         run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
