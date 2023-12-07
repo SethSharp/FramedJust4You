@@ -13,6 +13,8 @@ jobs:
     if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Copy example .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
@@ -60,6 +62,8 @@ jobs:
     if: github.ref == 'refs/heads/develop'
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Copy staging example .env
         run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
 
@@ -136,6 +140,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - uses: actions/checkout@v3
       - name: Copy production .env
         run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
