@@ -7,69 +7,103 @@ env:
   DB_USER: root
   DB_PASSWORD: root
 
-.common-setup: &common-setup
-  runs-on: ubuntu-20.04
-  steps:
-    - name: Copy example .env
-      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-    - name: Copy staging example .env
-      if: github.ref == 'refs/heads/develop'
-      run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
-
-    - name: Copy production .env
-      if: github.ref == 'refs/heads/main'
-      run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
-
-    - name: Set up MySQL
-      run: |
-        sudo /etc/init.d/mysql start
-        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-        extensions: zip, sqlite3
-        coverage: none
-
-    - name: Check composer compatibility
-      run: composer check-platform-reqs
-
-    - name: Install composer dependencies
-      run: composer install --no-cache --no-ansi --no-interaction --no-progress
-    #      env:
-    #        APP_URL: https://www.framedjustforyou.com.au
-
-    - name: Install node dependencies
-      run: npm ci
-
-    - name: Setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-
-    - name: Generate key
-      run: php artisan key:generate
-
-    - name: Build frontend
-      run: |
-        npm run build
-
-    - name: Execute tests
-      env:
-        DB_USERNAME: root
-        DB_PASSWORD: root
-      run: php artisan test
-
 jobs:
+  testing:
+    runs-on: ubuntu-20.4
+    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
+
+    steps:
+      - name: Copy example .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Copy staging example .env
+        run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: zip, sqlite3
+          coverage: none
+
+      - name: Check composer compatibility
+        run: composer check-platform-reqs
+
+      - name: Install composer dependencies
+        run: composer install --no-cache --no-ansi --no-interaction --no-progress
+      #      env:
+      #        APP_URL: https://www.framedjustforyou.com.au
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Build frontend
+        run: |
+          npm run build
+
+      - name: Execute tests
+        env:
+          DB_USERNAME: root
+          DB_PASSWORD: root
+        run: php artisan test
+
   staging:
-    <<: *common-setup
     runs-on: ubuntu-20.4
     if: github.ref == 'refs/heads/develop'
 
     steps:
+      - name: Copy staging example .env
+        run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
+
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: zip, sqlite3
+          coverage: none
+
+      - name: Check composer compatibility
+        run: composer check-platform-reqs
+
+      - name: Install composer dependencies
+        run: composer install --no-cache --no-ansi --no-interaction --no-progress
+      #      env:
+      #        APP_URL: https://www.framedjustforyou.com.au
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Build frontend
+        run: |
+          npm run build
+
+      - name: Execute tests
+        env:
+          DB_USERNAME: root
+          DB_PASSWORD: root
+        run: php artisan test
+
       - uses: actions/checkout@v3
 
       - name: Build ZIP Deployment Package
@@ -98,11 +132,54 @@ jobs:
   #          deployment_package: deploy.zip
 
   production:
-    <<: *common-setup
     runs-on: ubuntu-20.04
     if: github.ref == 'refs/heads/main'
 
     steps:
+      - name: Copy production .env
+        run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
+
+      - name: Set up MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: zip, sqlite3
+          coverage: none
+
+      - name: Check composer compatibility
+        run: composer check-platform-reqs
+
+      - name: Install composer dependencies
+        run: composer install --no-cache --no-ansi --no-interaction --no-progress
+      #      env:
+      #        APP_URL: https://www.framedjustforyou.com.au
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Build frontend
+        run: |
+          npm run build
+
+      - name: Execute tests
+        env:
+          DB_USERNAME: root
+          DB_PASSWORD: root
+        run: php artisan test
+
       - uses: actions/checkout@v3
 
       - name: Build ZIP Deployment Package
