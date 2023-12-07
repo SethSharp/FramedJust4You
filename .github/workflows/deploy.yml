@@ -3,69 +3,7 @@ name: Deployment
 on: [ push ]
 
 jobs:
-  other:
-
-    if: github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main'
-
-    runs-on: ubuntu-20.04
-
-    env:
-      DB_DATABASE: testing
-      DB_USER: root
-      DB_PASSWORD: root
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: zip, sqlite3
-          coverage: none
-
-      - name: Check composer compatability
-        run: composer check-platform-reqs
-
-      - name: Install composer dependencies
-        run: composer install --no-cache --no-ansi --no-interaction --no-progress
-        env:
-          APP_URL: https://www.framedjustforyou.com.au
-
-      - name: Install node dependencies
-        run: npm ci
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Copy example .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Build frontend
-        run: |
-          npm run build
-
-      - name: Execute tests
-        env:
-          DB_USERNAME: root
-          DB_PASSWORD: root
-        run: php artisan test
-
-  staging:
-
-    if: github.ref == 'refs/heads/develop'
-
+  deployment:
     runs-on: ubuntu-20.04
 
     env:
@@ -104,8 +42,17 @@ jobs:
         with:
           node-version: 16
 
+      - name: Copy production .env
+        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
+        run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
+
       - name: Copy staging example .env
+        if: github.ref == 'refs/heads/develop'
         run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
+
+      - name: Copy production .env
+        if: github.ref == 'refs/heads/main'
+        run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
 
       - name: Generate key
         run: php artisan key:generate
@@ -121,9 +68,11 @@ jobs:
         run: php artisan test
 
       - name: Build ZIP Deployment Package
+        if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
       - name: Echo DB information to env
+        if: github.ref == 'refs/heads/develop'
         run: |
           echo "DB_HOST=${{ secrets.STAGING_DB_HOST}}" >> .env
           echo "DB_DATABASE=${{ secrets.STAGING_DB_DATABASE}}" >> .env
@@ -131,6 +80,7 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.STAGING_DB_PASSWORD}}" >> .env
 
       - name: Deploy to Staging Environment
+        if: github.ref == 'refs/heads/develop'
         uses: einaregilsson/beanstalk-deploy@v18
         with:
           aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
@@ -142,72 +92,8 @@ jobs:
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
 
-      - name: Notify Slack
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Staging updated!"}' https://hooks.slack.com/services/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
-
-  production:
-
-    if: github.ref == 'refs/heads/main'
-
-    env:
-      DB_DATABASE: testing
-      DB_USER: root
-      DB_PASSWORD: root
-
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Copy production .env
-        run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
-
-      - name: Set up MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: zip, sqlite3
-          coverage: none
-
-      - name: Check composer compatibility
-        run: composer check-platform-reqs
-
-      - name: Install composer dependencies
-        run: composer install --no-cache --no-ansi --no-interaction --no-progress
-        env:
-          APP_URL: https://www.framedjustforyou.com.au
-
-      - name: Install node dependencies
-        run: npm ci
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Build frontend
-        run: |
-          npm run build
-
-      - name: Execute tests
-        env:
-          DB_USERNAME: root
-          DB_PASSWORD: root
-        run: php artisan test
-
-      - name: Build ZIP Deployment Package
-        run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
-
       - name: Deploy to Production Environment
+        if: github.ref == 'refs/heads/main'
         run: echo 'Deploying to production'
         uses: einaregilsson/beanstalk-deploy@v18
         with:
