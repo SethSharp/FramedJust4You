@@ -3,15 +3,14 @@ name: Deployment
 on: [ push ]
 
 jobs:
-  staging:
-    runs-on: ubuntu-20.4
+  deployment:
+
+    runs-on: ubuntu-20.04
 
     env:
       DB_DATABASE: testing
       DB_USER: root
       DB_PASSWORD: root
-
-    if: github.ref == 'refs/heads/develop'
 
     steps:
       - uses: actions/checkout@v3
@@ -33,8 +32,6 @@ jobs:
 
       - name: Install composer dependencies
         run: composer install --no-cache --no-ansi --no-interaction --no-progress
-      #      env:
-      #        APP_URL: https://www.framedjustforyou.com.au
 
       - name: Install node dependencies
         run: npm ci
