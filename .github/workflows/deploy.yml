@@ -71,20 +71,21 @@ jobs:
           echo "DB_USERNAME=${{ secrets.STAGING_DB_USERNAME}}" >> .env
           echo "DB_PASSWORD=${{ secrets.STAGING_DB_PASSWORD}}" >> .env
 
-      - name: Deploy to Staging Environment
+      #      - name: Deploy to Staging Environment
+      #        uses: einaregilsson/beanstalk-deploy@v18
+      #        with:
+      #          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
+      #          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
+      #          application_name: "FramedJustForYou"
+      #          environment_name: FramedJustForYou-env
+      #          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
+      #          region: ap-southeast-2
+      #          version_label: ${{ github.sha }}
+      #          deployment_package: deploy.zip
+
+      - name: Notify Slack
         run: |
-          echo 'Deploying to staging'
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Testing here"}' https://hooks.slack.com/services/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
-  #        uses: einaregilsson/beanstalk-deploy@v18
-  #        with:
-  #          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
-  #          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
-  #          application_name: "FramedJustForYou"
-  #          environment_name: FramedJustForYou-env
-  #          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
-  #          region: ap-southeast-2
-  #          version_label: ${{ github.sha }}
-  #          deployment_package: deploy.zip
+          curl -X POST -H 'Content-type: application/json' --data '{"text:"Deployed to staging!"}' https://hooks.slack.com/services/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
 
   production:
 
