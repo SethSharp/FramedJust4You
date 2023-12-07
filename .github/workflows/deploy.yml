@@ -64,9 +64,6 @@ env:
       run: php artisan test
 
 jobs:
-  testing:
-    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
-
   staging:
     <<: *common-setup
     runs-on: ubuntu-20.4
