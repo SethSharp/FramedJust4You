@@ -16,9 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: test
-        run: echo 'running'
-
       - name: Set up MySQL
         run: |
           sudo /etc/init.d/mysql start
@@ -62,8 +59,6 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
         run: php artisan test
-
-      - uses: actions/checkout@v3
 
       - name: Build ZIP Deployment Package
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
@@ -139,8 +134,6 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: root
         run: php artisan test
-
-      - uses: actions/checkout@v3
 
       - name: Build ZIP Deployment Package
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
