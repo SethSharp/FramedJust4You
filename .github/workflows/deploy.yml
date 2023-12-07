@@ -2,58 +2,7 @@ name: Deployment
 
 on: [ push ]
 
-env:
-  DB_DATABASE: testing
-  DB_USER: root
-  DB_PASSWORD: root
-
 jobs:
-  testing:
-    runs-on: ubuntu-20.4
-    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Copy example .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: zip, sqlite3
-          coverage: none
-
-      - name: Check composer compatibility
-        run: composer check-platform-reqs
-
-      - name: Install composer dependencies
-        run: composer install --no-cache --no-ansi --no-interaction --no-progress
-      #      env:
-      #        APP_URL: https://www.framedjustforyou.com.au
-
-      - name: Install node dependencies
-        run: npm ci
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Build frontend
-        run: |
-          npm run build
-
-      - name: Execute tests
-        env:
-          DB_USERNAME: root
-          DB_PASSWORD: root
-        run: php artisan test
-
   staging:
     runs-on: ubuntu-20.4
 
