@@ -2,106 +2,124 @@ name: Deployment
 
 on: [ push ]
 
+env:
+  DB_DATABASE: testing
+  DB_USER: root
+  DB_PASSWORD: root
+
+.common-setup: &common-setup
+  runs-on: ubuntu-20.04
+  steps:
+    - name: Copy example .env
+      if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: Copy staging example .env
+      if: github.ref == 'refs/heads/develop'
+      run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
+
+    - name: Copy production .env
+      if: github.ref == 'refs/heads/main'
+      run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
+
+    - name: Set up MySQL
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: zip, sqlite3
+        coverage: none
+
+    - name: Check composer compatibility
+      run: composer check-platform-reqs
+
+    - name: Install composer dependencies
+      run: composer install --no-cache --no-ansi --no-interaction --no-progress
+    #      env:
+    #        APP_URL: https://www.framedjustforyou.com.au
+
+    - name: Install node dependencies
+      run: npm ci
+
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Generate key
+      run: php artisan key:generate
+
+    - name: Build frontend
+      run: |
+        npm run build
+
+    - name: Execute tests
+      env:
+        DB_USERNAME: root
+        DB_PASSWORD: root
+      run: php artisan test
+
 jobs:
-  deployment:
+  testing:
+    if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
 
-    runs-on: ubuntu-20.04
-
-    env:
-      DB_DATABASE: testing
-      DB_USER: root
-      DB_PASSWORD: root
+  staging:
+    <<: *common-setup
+    runs-on: ubuntu-20.4
+    if: github.ref == 'refs/heads/develop'
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up MySQL
-        run: |
-          sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: zip, sqlite3
-          coverage: none
-
-      - name: Check composer compatability
-        run: composer check-platform-reqs
-
-      - name: Install composer dependencies
-        run: composer install --no-cache --no-ansi --no-interaction --no-progress
-        env:
-          APP_URL: https://www.framedjustforyou.com.au
-
-      - name: Install node dependencies
-        run: npm ci
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Copy production .env
-        if: github.ref == 'refs/heads/main'
-        run: php -r "file_exists('.env') || copy('.env.production.example', '.env');"
-
-      - name: Copy staging example .env
-        if: github.ref == 'refs/heads/develop'
-        run: php -r "file_exists('.env') || copy('.env.staging.example', '.env');"
-
-      - name: Copy example .env
-        if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/develop'
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Build frontend
-        run: |
-          npm run build
-
-      - name: Execute tests
-        env:
-          DB_USERNAME: root
-          DB_PASSWORD: root
-        run: php artisan test
+      - name: Build ZIP Deployment Package
+        run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
       - name: Echo DB information to env
-        if: github.ref == 'refs/heads/develop'
         run: |
           echo "DB_HOST=${{ secrets.STAGING_DB_HOST}}" >> .env
           echo "DB_DATABASE=${{ secrets.STAGING_DB_DATABASE}}" >> .env
           echo "DB_USERNAME=${{ secrets.STAGING_DB_USERNAME}}" >> .env
           echo "DB_PASSWORD=${{ secrets.STAGING_DB_PASSWORD}}" >> .env
 
+      - name: Deploy to Staging Environment
+        run: |
+          echo 'Deploying to staging'
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Testing here"}' https://hooks.slack.com/services/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
+  #        uses: einaregilsson/beanstalk-deploy@v18
+  #        with:
+  #          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
+  #          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
+  #          application_name: "FramedJustForYou"
+  #          environment_name: FramedJustForYou-env
+  #          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
+  #          region: ap-southeast-2
+  #          version_label: ${{ github.sha }}
+  #          deployment_package: deploy.zip
+
+  production:
+    <<: *common-setup
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v3
+
       - name: Build ZIP Deployment Package
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
         run: zip -r deploy.zip ./ -x "node_modules/*" -x "vendor/*" -x "tests/*"
 
-      - name: Deploy to Staging Environment
-        if: github.ref == 'refs/heads/develop'
-        uses: einaregilsson/beanstalk-deploy@v18
-        with:
-          aws_access_key: ${{ secrets.STAGING_AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.STAGING_AWS_SECRET_KEY }}
-          application_name: "FramedJustForYou"
-          environment_name: FramedJustForYou-env
-          existing_bucket_name: ${{ secrets.STAGING_AWS_BUCKET_NAME }}
-          region: ap-southeast-2
-          version_label: ${{ github.sha }}
-          deployment_package: deploy.zip
-
       - name: Deploy to Production Environment
-        if: github.ref == 'refs/heads/main'
-        uses: einaregilsson/beanstalk-deploy@v18
-        with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-          application_name: "FramedJust4You"
-          environment_name: FramedJust4You-env
-          existing_bucket_name: ${{ secrets.AWS_BUCKET_NAME }}
-          region: ap-southeast-2
-          version_label: ${{ github.sha }}
-          deployment_package: deploy.zip
+        run: echo 'Deploying to production'
+#        uses: einaregilsson/beanstalk-deploy@v18
+#        with:
+#          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+#          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+#          application_name: "FramedJust4You"
+#          environment_name: FramedJust4You-env
+#          existing_bucket_name: ${{ secrets.AWS_BUCKET_NAME }}
+#          region: ap-southeast-2
+#          version_label: ${{ github.sha }}
+#          deployment_package: deploy.zip
