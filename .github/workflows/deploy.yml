@@ -95,7 +95,7 @@ jobs:
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
 
-      - name: Notify Slack of Staging being updated
+      - name: Notify Slack
         if: github.ref == 'refs/heads/develop'
         run: |
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Staging has been updated!"}' https://hooks.slack.com/services/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
