@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::prefix('/store')->middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['role:admin,manager'])->get('/dashboard', \App\Http\Controllers\ShowDashboardController::class)->name('dashboard');
 
     Route::middleware('auth')->name('profile.')->group(function () {

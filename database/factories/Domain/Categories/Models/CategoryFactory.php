@@ -14,8 +14,8 @@ class CategoryFactory extends Factory
     {
         return [
             'file_id' => File::factory()->create(),
-            'name' => fake()->name(),
-            'description' => fake()->words(6, true),
+            'name' => $this->faker->words(2, true),
+            'description' => $this->faker->words(8, true),
         ];
     }
 }
