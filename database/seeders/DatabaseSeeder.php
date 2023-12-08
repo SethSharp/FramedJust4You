@@ -12,6 +12,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->environment('production')) {
+            throw new \RuntimeException("Cannot refresh the production database man!!");
+        }
+
         Artisan::call('bootstrap');
 
         $this->call(UserTableSeeder::class);
