@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Domain\Iam\Models\Role;
 use Inertia\Inertia;
+use App\Domain\Iam\Models\Role;
 
 class ShowDashboardController extends Controller
 {
