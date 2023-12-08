@@ -14,5 +14,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@framed.test'
         ]);
+
+        User::factory()->count(2)->create();
     }
 }
