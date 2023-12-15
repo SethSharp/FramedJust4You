@@ -35,7 +35,7 @@ const fileUpload = () => {
 
 <template>
     <div class="flex items-center space-x-2">
-        <img :src="newImage ?? currentImage" class="h-24 w-24 rounded-full" />
+        <img :src="newImage ?? currentImage" class="h-24 w-24 rounded-xl" />
 
         <input
             id="file-upload"
