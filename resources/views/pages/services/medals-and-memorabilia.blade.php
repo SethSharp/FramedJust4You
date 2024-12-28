@@ -26,14 +26,17 @@
             </x-slot>
 
             <x-slot name="content">
-                <div class="lg:flex gap-4">
-                    <div class="lg:w-3/5">
-                        We understand the unique value of your memorabilia, and that's why we take great care in handling and displaying it appropriately.
-                        Our conservation framing techniques ensure that your cherished pieces are framed in a manner that allows for easy removal while preserving
-                        their original condition. Your memorabilia remains both well-protected and accessible when you choose our services.
+                <div>
+                    <div>
+                        We understand the unique value of your memorabilia, and that's why we take great care in
+                        handling and displaying it appropriately.
+                        Our conservation framing techniques ensure that your cherished pieces are framed in a manner
+                        that allows for easy removal while preserving
+                        their original condition. Your memorabilia remains both well-protected and accessible when you
+                        choose our services.
                     </div>
-                    <div class="lg:w-2/5 mt-6 lg:mt-0 flex justify-center">
-                        <x-section.whats-on-this-page :links="$links" />
+                    <div>
+                        <x-section.whats-on-this-page :links="$links"/>
                     </div>
                 </div>
             </x-slot>

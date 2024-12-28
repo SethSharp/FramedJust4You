@@ -6,7 +6,7 @@
     >
         <div class="bg-gradient-to-r from-primary-600 to-primary-500">
             <div
-                class="relative flex w-full items-center justify-between lg:border-b lg:border-primary-400 lg:border-opacity-25"
+                class="relative flex w-full items-center justify-between h-32 lg:border-b lg:border-primary-400 lg:border-opacity-25"
             >
                 <div class="grid grid-cols-3 w-full">
                     <div class="w-52 md:w-72 col-span-1 px-2 pb-2">

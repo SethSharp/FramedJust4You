@@ -1,6 +1,6 @@
 @props(['content', 'image', 'title' => null])
-<div class="space-y-4 lg:relative lg:flex items-center justify-center">
-    <x-section.content class="!bg-secondary-100 lg:absolute right-1/3 z-10 border-none">
+<div class="space-y-4 flex items-center justify-center">
+    <x-section.sub-content class="!bg-secondary-100 z-10 border-none w-1/2">
         @if ($title)
             <x-slot name="title">
                 {{ $title }}
@@ -11,9 +11,9 @@
                 {{$content}}
             </div>
         </x-slot>
-    </x-section.content>
+    </x-section.sub-content>
 
-    <div class="lg:w-1/2 lg:ml-auto lg:relative">
+    <div class="w-1/2">
         {{ $image }}
     </div>
 </div>

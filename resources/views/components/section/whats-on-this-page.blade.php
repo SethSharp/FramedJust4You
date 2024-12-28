@@ -1,5 +1,5 @@
 <div class="my-auto">
-    <x-headings.secondary> Whats on this page</x-headings.secondary>
+    <x-headings.secondary title="Whats on this page"/>
 
     <div class="ml-2">
         <uL>
